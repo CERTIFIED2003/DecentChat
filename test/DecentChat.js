@@ -60,4 +60,29 @@ describe("DecentChat", function () {
       expect(channel.cost).to.be.equal(tokens(1))
     })
   })
+
+  describe("Joining Channels", () => {
+    const ID = 1
+    const AMOUNT = ethers.utils.parseUnits("1", "ether")
+
+    beforeEach(async () => {
+      const transaction = await decentchat.connect(user).mint(ID, { value: AMOUNT })
+      await transaction.wait()
+    })
+
+    it("User joins", async () => {
+      const result = await decentchat.hasJoined(ID, user.address)
+      expect(result).to.be.equal(true)
+    })
+
+    it("Increasing the total supply", async () => {
+      const result = await decentchat.totalSupply()
+      expect(result).to.be.equal(ID)
+    })
+
+    it("Updating the contract balance", async () => {
+      const result = await ethers.provider.getBalance(decentchat.address)
+      expect(result).to.be.equal(AMOUNT)
+    })
+  })
 })
