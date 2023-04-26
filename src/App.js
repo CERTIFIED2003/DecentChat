@@ -15,14 +15,27 @@ import DecentChat from './abis/DecentChat.json'
 import config from './config.json';
 
 // Socket
-const socket = io('ws://localhost:3030');
+// const socket = io('ws://localhost:3030');
 
 function App() {
+  const [account, setAccount] = useState(null);
+
+  const loadBlockchainData = async () => {
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    const account = ethers.utils.getAddress(accounts[0]);
+    setAccount(account);
+  };
+
+  useEffect(() => {
+    loadBlockchainData();
+  }, []);
 
   return (
     <div>
-      <h1 style={{ textAlign: "center", padding: "15px" }}>Welcome to DecentChat</h1>
-
+      <Navigation
+        account={account}
+        setAccount={setAccount}
+      />
       <main>
 
       </main>
