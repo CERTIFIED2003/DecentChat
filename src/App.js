@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
-// import { io } from "socket.io-client"
+import { io } from "socket.io-client"
 
 // Components
 import Navigation from './components/Navigation'
@@ -15,7 +15,7 @@ import DecentChat from './abis/DecentChat.json'
 import config from './config.json';
 
 // Socket
-// const socket = io('ws://localhost:3030');
+const socket = io(process.env.REACT_APP_BACKEND_URL);
 
 function App() {
   const [account, setAccount] = useState(null);
@@ -23,6 +23,7 @@ function App() {
   const [decentchat, setDecentChat] = useState(null);
   const [channels, setChannels] = useState([]);
   const [currentChannel, setCurrentChannel] = useState(null);
+  const [messages, setMessages] = useState([]);
 
   const loadBlockchainData = async () => {
     const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -47,6 +48,22 @@ function App() {
 
   useEffect(() => {
     loadBlockchainData();
+
+    socket.on("connect", () => {
+      socket.emit("get messages");
+    });
+    socket.on("new message", (messages) => {
+      console.log("New Message...");
+    });
+    socket.on("get messages", (messages) => {
+      setMessages(messages);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("new message");
+      socket.off("get messages");
+    }
   }, []);
 
   return (
@@ -65,7 +82,11 @@ function App() {
           currentChannel={currentChannel}
           setCurrentChannel={setCurrentChannel}
         />
-        <Messages />
+        <Messages 
+          account={account}
+          messages={messages}
+          currentChannel={currentChannel}
+        />
       </main>
     </div>
   );

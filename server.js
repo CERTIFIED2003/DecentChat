@@ -1,5 +1,7 @@
 const express = require('express')
+const dotenv = require('dotenv');
 const app = express()
+dotenv.config();
 
 const PORT = process.env.PORT || 3030
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}\n`))
@@ -13,7 +15,7 @@ const messages = [
   {
     channel: "2",
     account: "0xcA8Fa8f0b631EcdB18Cda619C4Fc9d197c8aFfCa",
-    text: "Welcome to DecentChat everyone! My name is John and I've been a blockchain developer for 2+ years."
+    text: "Welcome to DecentChat everyone! My name is Shubham and I've been a game developer for past 1 year."
   },
   {
     channel: "1",
@@ -55,7 +57,7 @@ const messages = [
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000"
+    origin: process.env.FRONTEND_URL
   }
 })
 
