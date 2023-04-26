@@ -1,5 +1,7 @@
 # DecentApp
 
+[Live Site 🚀](https://decentchat.pages.dev)
+
 ## Technology Stack & Tools
 
 - [Solidity](https://docs.soliditylang.org/en/latest/) (Writing Smart Contracts & Tests)
