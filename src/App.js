@@ -26,9 +26,12 @@ function App() {
   const [messages, setMessages] = useState([]);
 
   const loadBlockchainData = async () => {
-    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    const account = ethers.utils.getAddress(accounts[0]);
-    setAccount(account);
+    // const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    // const account = ethers.utils.getAddress(accounts[0]);
+    // setAccount(account);
+    window.ethereum.on("accountsChanged", async () => {
+      window.location.reload();
+    });
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     setProvider(provider);
